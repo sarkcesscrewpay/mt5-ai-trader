@@ -1,0 +1,86 @@
+site_name: MetaTrader 5 MCP Server
+site_description: A Model Context Protocol (MCP) server for MetaTrader 5
+site_author: Abdul Qoyyuum
+site_url: https://mcp-metatrader5-server.readthedocs.io
+
+repo_name: Qoyyuum/mcp-metatrader5-server
+repo_url: https://github.com/Qoyyuum/mcp-metatrader5-server
+edit_uri: edit/main/docs/
+
+# Specify docs directory (relative to mkdocs.yml location)
+docs_dir: .
+
+# Build output directory (outside of docs_dir to avoid nested builds)
+site_dir: ../site
+
+theme:
+  name: material
+  palette:
+    # Light mode
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    # Dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - navigation.instant
+    - navigation.tracking
+    - navigation.tabs
+    - navigation.sections
+    - navigation.expand
+    - navigation.top
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+    - content.code.annotate
+
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+  - admonition
+  - pymdownx.details
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - attr_list
+  - md_in_html
+  - tables
+  - toc:
+      permalink: true
+
+plugins:
+  - search
+  - autorefs
+
+nav:
+  - Home: index.md
+  - Getting Started: getting_started.md
+  - Guides:
+      - Market Data: market_data_guide.md
+      - Trading: trading_guide.md
+      - Pydantic AI Integration: pydantic_ai_integration.md
+  - Development:
+      - Publishing: publishing.md
+  - API Reference: api_reference.md
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/Qoyyuum/mcp-metatrader5-server
+    - icon: fontawesome/brands/python
+      link: https://pypi.org/project/mcp-metatrader5-server/

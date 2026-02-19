@@ -1,0 +1,17 @@
+{
+  "name": "mcp-metatrader5-server",
+  "version": "0.1.4",
+  "server": "src/mcp_mt5/main.py:mcp",
+  "dependencies": [
+    "fastmcp==2.12.4",
+    "metatrader5==5.0.5260",
+    "pandas>=2.3.3",
+    "pydantic>=2.11.9",
+    "python-dotenv>=1.1.1"
+  ],
+  "environment": {
+    "MT5_MCP_TRANSPORT": "http",
+    "MT5_MCP_HOST": "127.0.0.1",
+    "MT5_MCP_PORT": "8000"
+  }
+}

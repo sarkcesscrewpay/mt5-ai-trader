@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 📚 Documentation
+    url: https://mcp-metatrader5-server.readthedocs.io
+    about: Check the documentation for usage guides and API reference
+  - name: 💬 Discussions
+    url: https://github.com/Qoyyuum/mcp-metatrader5-server/discussions
+    about: Ask questions and discuss ideas with the community
+  - name: 🔒 Security Issue
+    url: https://github.com/Qoyyuum/mcp-metatrader5-server/security/advisories/new
+    about: Report a security vulnerability privately

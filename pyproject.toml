@@ -1,0 +1,81 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "mcp-metatrader5-server"
+version = "0.1.7"
+description = "A Model Context Protocol (MCP) server for MetaTrader 5"
+readme = "README.md"
+requires-python = ">=3.11"
+authors = [
+    {name = "Abdul Qoyyuum"}
+]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Financial and Insurance Industry",
+    "Topic :: Office/Business :: Financial :: Investment",
+]
+dependencies = [
+    "fastmcp==2.14.0",
+    "metatrader5==5.0.5430",
+    "pandas>=2.3.3",
+    "pydantic>=2.11.9",
+    "python-dotenv>=1.1.1",
+]
+
+[project.optional-dependencies]
+docs = [
+    "mkdocs>=1.5.3",
+    "mkdocs-material>=9.5.0",
+    "pymdown-extensions>=10.7",
+    "mkdocs-autorefs>=0.5.0",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/Qoyyuum/mcp-metatrader5-server"
+"Bug Tracker" = "https://github.com/Qoyyuum/mcp-metatrader5-server/issues"
+"Documentation" = "https://mcp-metatrader5-server.readthedocs.io"
+
+[project.scripts]
+mt5mcp = "mcp_mt5:main"
+
+[tool.hatchling]
+package-dir = {"" = "src"}
+
+[tool.hatchling.packages.find]
+where = ["src"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/mcp_mt5"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = [
+    "-v",
+    "--strict-markers",
+    "--cov=mcp_mt5",
+    "--cov-report=term-missing",
+    "--cov-report=html",
+]
+markers = [
+    "unit: Unit tests that don't require MT5",
+    "integration: Integration tests that require MT5 connection",
+    "slow: Slow running tests",
+]
+asyncio_mode = "auto"
+
+[dependency-groups]
+dev = [
+    "pydantic-ai>=1.2.1",
+    "pytest>=8.4.2",
+    "pytest-asyncio>=0.23.0",
+    "pytest-cov>=4.1.0",
+    "pytest-mock>=3.12.0",
+]

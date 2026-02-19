@@ -1,0 +1,47 @@
+# MT5 Trading Bot Configuration
+
+system:
+  mode: paper_trading  # or live
+  symbols:
+    - EURUSD
+    - GBPUSD
+    - USDJPY
+  max_concurrent_trades: 5
+
+data:
+  timeframe: H1
+  lookback_periods: 1000
+  update_interval: 300  # seconds
+
+ai_model:
+  model_type: xgboost
+  min_confidence: 0.65
+  retrain_frequency: weekly
+  features:
+    - rsi
+    - macd
+    - ema
+    - atr
+    - volume
+
+risk:
+  max_risk_per_trade: 0.02  # 2%
+  max_daily_drawdown: 0.05  # 5%
+  max_open_positions: 5
+  atr_multiplier_sl: 2.0
+  atr_multiplier_tp: 4.0
+  min_risk_reward: 1.5
+
+execution:
+  slippage_protection: true
+  max_slippage_pips: 2
+  order_retry_count: 3
+
+safety:
+  kill_switch_enabled: true
+  capital_protection_mode: true
+  news_filter_enabled: false
+  trading_hours_filter: true
+  allowed_sessions:
+    - London
+    - NewYork

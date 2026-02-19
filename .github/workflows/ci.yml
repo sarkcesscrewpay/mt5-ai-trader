@@ -1,0 +1,137 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  test:
+    name: Test on Python ${{ matrix.python-version }}
+    runs-on: windows-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11", "3.12", "3.13"]
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v6
+
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v6
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: Install uv
+      uses: astral-sh/setup-uv@v7
+      with:
+        enable-cache: true
+
+    - name: Install dependencies
+      run: |
+        uv sync --all-extras
+
+    - name: Run unit tests
+      run: |
+        uv run pytest -v -m unit --cov=mcp_mt5 --cov-report=xml --cov-report=term
+
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v5
+      if: matrix.python-version == '3.13'
+      with:
+        files: ./coverage.xml
+        flags: unittests
+        name: codecov-umbrella
+        fail_ci_if_error: false
+      env:
+        CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+
+  lint:
+    name: Lint and Format Check
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v6
+
+    - name: Set up Python
+      uses: actions/setup-python@v6
+      with:
+        python-version: "3.13"
+
+    - name: Install uv
+      uses: astral-sh/setup-uv@v7
+
+    - name: Install ruff
+      run: |
+        uv tool install ruff
+
+    - name: Run ruff check
+      run: |
+        uvx ruff check src/ tests/
+
+    - name: Run ruff format check
+      run: |
+        uvx ruff format --check src/ tests/
+
+  build:
+    name: Build Package
+    runs-on: ubuntu-latest
+    needs: [test, lint]
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v6
+
+    - name: Set up Python
+      uses: actions/setup-python@v6
+      with:
+        python-version: "3.13"
+
+    - name: Install uv
+      uses: astral-sh/setup-uv@v7
+
+    - name: Build package
+      run: |
+        uv build
+
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v6
+      with:
+        name: dist
+        path: dist/
+
+  docs:
+    name: Build Documentation
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v6
+
+    - name: Set up Python
+      uses: actions/setup-python@v6
+      with:
+        python-version: "3.13"
+
+    - name: Install uv
+      uses: astral-sh/setup-uv@v7
+
+    - name: Install docs dependencies only
+      run: |
+        # Install only docs dependencies without the main package
+        # This avoids the MetaTrader5 Windows-only dependency
+        uv pip install --system mkdocs>=1.5.3 mkdocs-material>=9.5.0 pymdown-extensions>=10.7 mkdocs-autorefs>=0.5.0
+
+    - name: Build docs
+      run: |
+        mkdocs build --strict --config-file docs/mkdocs.yml
+
+    - name: Upload docs artifacts
+      uses: actions/upload-artifact@v6
+      with:
+        name: docs
+        path: site/
